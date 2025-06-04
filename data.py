@@ -2,7 +2,7 @@ import csv
 import class_professor
 import class_prof_manager
 import class_course
-import script
+from script import generate_script
 import error
 
 """
@@ -17,9 +17,15 @@ def clean_data(filename):
         reader = csv.reader(infile)
         writer = csv.writer(outfile)
 
-        error.check_header_line(next(reader))
+        header = next(reader)
+
+        error.check_header_line(header)
+
+        infile.seek(0)  # Rewind file pointer
+        reader = csv.reader(infile) 
 
         for row in reader:
+
 
             try:
                 if row[8] != "TBA" and row[12] != "Staff":
@@ -43,7 +49,7 @@ Checks the inserted row item and if it has nothing in it. It will fill the empty
 
 def check_item(item):
     if item == "":
-        item = "Not Listed"
+        item = ""
     return item 
 
 """
@@ -51,7 +57,7 @@ Read reads each row of the csv and creates a corresponding Professor Object and 
 """
     
 
-def read_data(filename,username):
+def read_data(filename,username,script):
     
     
     with open(filename,'r') as infile:
@@ -63,6 +69,7 @@ def read_data(filename,username):
         i = 0
 
         for row in reader:
+                
                 try:
                     prof_name = check_item(row[12])
                     course_name = check_item(row[5])
@@ -102,7 +109,7 @@ def read_data(filename,username):
 
         
         for professor in manager.professors:
-            script.generate_script(professor,username)
+            generate_script(professor,username,script)
 
    
      

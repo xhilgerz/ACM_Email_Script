@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox,scrolledtext
 from tkinter import Tk, Label
 from data import clean_data
 from data import read_data
@@ -14,6 +14,8 @@ class ACMEmailGenerator:
         self.root.title("ACM Email Generator")
         self.image_url ="ACM.png"
         self.tk_image = ""
+        self.script = "Greetings!\n\tI hope the start of the semester has been treating you well. My name is Zander Brysch and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
+        self.default_script = "Greetings!\n\tI hope the start of the semester has been treating you well. My name is Zander Brysch and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
         
         
         self.setup_ui()
@@ -53,6 +55,10 @@ class ACMEmailGenerator:
                                      command=self.on_script_button_click,
                                      state=tk.DISABLED)
         self.script_button.pack(pady=10)
+
+        self.edit_script_button = tk.Button(self.root, text="Edit Script", 
+                                     command=self.edit_script_button_click)
+        self.edit_script_button.pack(pady=10)
         
         # Status label
         self.status_label = tk.Label(self.root, text="No file selected")
@@ -84,11 +90,120 @@ class ACMEmailGenerator:
         try:
             print(self.filename)
             popup = InputPopup(self.root, "", "Enter First and Last Name to be put into default Script")
-            read_data(self.filename,popup.value)
+            read_data(self.filename,popup.value,self.script)
             
             messagebox.showinfo("Success", f"Scripts created successfully.")
         except Exception as e:
             messagebox.showerror("Error", str(e))
+
+    def edit_script_button_click(self):
+        try:
+            # Create a new top-level window for editing
+            self.script_window = tk.Toplevel(self.root)
+            self.script_window.title("Edit Script")
+            self.script_window.geometry("800x600")
+            
+            # Create frame to hold text widget and buttons
+            editor_frame = tk.Frame(self.script_window)
+            editor_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            
+            # Create scrollable text box
+            self.script_editor = scrolledtext.ScrolledText(
+                editor_frame,
+                wrap=tk.WORD,
+                font=('Consolas', 11),  # Monospace font for scripts
+                undo=True,  # Enable undo/redo
+                padx=10,
+                pady=10
+            )
+            self.script_editor.pack(fill=tk.BOTH, expand=True)
+            
+            # Load existing script content if available
+            if hasattr(self, 'script'):
+                self.script_editor.insert(tk.END, self.script)
+            
+            # Add control buttons
+            button_frame = tk.Frame(editor_frame)
+            button_frame.pack(fill=tk.X, pady=5)
+            
+            tk.Button(
+                button_frame, 
+                text="Save",
+                command=self.save_script,
+                bg="#4CAF50",
+                fg="white"
+            ).pack(side=tk.LEFT, padx=5)
+            
+            tk.Button(
+                button_frame,
+                text="Clear",
+                command=lambda: self.script_editor.delete(1.0, tk.END),
+                bg="#f44336",
+                fg="white"
+            ).pack(side=tk.LEFT, padx=5)
+
+            tk.Button(
+                button_frame,
+                text="Default",
+                command=lambda: self.restore_default_script(),
+                bg="Grey",
+                fg="white"
+            ).pack(side=tk.LEFT, padx=5)
+            
+            #messagebox.showinfo("Editor Ready", "You can now edit the script.")
+            
+        except Exception as e:
+            messagebox.showerror("Editor Error", f"Failed to open editor:\n{str(e)}")
+    
+    
+    def save_script(self):
+        """Saves the content of the script editor"""
+        if hasattr(self, 'script_editor'):
+            self.script = self.script_editor.get(1.0, tk.END)
+            messagebox.showinfo("Saved", "Script content saved successfully!")
+        else:
+            messagebox.showwarning("No Editor", "No active editor window found")
+            
+    
+    
+    def restore_default_script(self):
+        self.script_editor.delete(1.0, tk.END)
+        self.script_editor.insert(tk.END, self.default_script)
+
+    
+    
+    
+    def create_editable_textbox(parent):
+        """Creates an editable, scrollable text box"""
+        # Create a frame to hold text widget and scrollbars
+        frame = tk.Frame(parent)
+        frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Vertical scrollbar
+        y_scroll = tk.Scrollbar(frame)
+        y_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Horizontal scrollbar (optional)
+        x_scroll = tk.Scrollbar(frame, orient=tk.HORIZONTAL)
+        x_scroll.pack(side=tk.BOTTOM, fill=tk.X)
+        
+        # Create the editable text widget
+        text_box = tk.Text(
+            frame,
+            wrap=tk.WORD,  # Wrap at word boundaries
+            yscrollcommand=y_scroll.set,
+            xscrollcommand=x_scroll.set,
+            undo=True,      # Enable undo/redo functionality
+            maxundo=-1,     # Unlimited undo steps
+            font=('Arial', 12)  # Customizable font
+        )
+        text_box.pack(fill=tk.BOTH, expand=True)
+        
+        # Configure scrollbars
+        y_scroll.config(command=text_box.yview)
+        x_scroll.config(command=text_box.xview)
+        
+        return text_box
     
     def run(self):
         self.root.mainloop()
