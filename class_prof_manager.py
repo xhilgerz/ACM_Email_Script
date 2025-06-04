@@ -1,3 +1,6 @@
+"""
+A manager meant for arranging and working with the professors' array
+"""
 class Manager:
 
     def __init__(self):

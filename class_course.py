@@ -1,3 +1,6 @@
+"""
+Course object that represents a course and its corresponding info
+"""
 class Course:
     def __init__(self,name,time,date,course_num,campus):
 

@@ -1,10 +1,10 @@
+"""
+Professor object that is named after the professor and stores the professor's classes info 
+"""
 class Professor:
     def __init__(self,name):
         self.name = name
         self.courses = []
-
-    
-
 
     def add_course(self, class_obj):
         if not hasattr(class_obj, 'course_num'):
