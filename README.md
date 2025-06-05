@@ -3,7 +3,7 @@
 ## Description 📓 
 A program designed for recieiving, cleaning, and transforming school schedule data into sendable email formats with teacher filenames and their classes at the bottom.
 
-![Image of Program](https://imgur.com/p5iHXVB)
+![Image of Program](https://imgur.com/a/rUjUz6G)
 
 ## How to use🛠️
 - When you are sent the CSV data sheet it should include many columns including the important ones below...
@@ -14,7 +14,7 @@ Instructor | Title | Times | Meeting Days | Course| Campus
 
 - Edit the dataset in any spreadsheet editor to remove any unwanted text above the header and below the final line of the dataset
  
-![Video of Previous Steps](https://imgur.com/a/Ga3kuLd)
+![Video of Previous Steps](https://imgur.com/a/qx201YA)
 
 - Make sure to do this as the program will not run correctly and crash otherwise
 
