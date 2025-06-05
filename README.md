@@ -13,7 +13,7 @@ Instructor | Title | Times | Meeting Days | Course| Campus
 
 - Edit the dataset in any spreadsheet editor to remove any unwanted text above the header and below the final line of the dataset
  
-![Video of Previous Steps](images/Editing_dataset.mp4)
+![Video of Previous Steps](images/Course_dataset.gif)
 
 - Make sure to do this as the program will not run correctly and crash otherwise
 
