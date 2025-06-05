@@ -12,9 +12,9 @@ class ACMEmailGenerator:
         self.root = tk.Tk()
         self.root.geometry("400x300")
         self.root.title("ACM Email Generator")
-        self.image_url ="ACM.png"
+        self.image_url ="images/ACM.png"
         self.tk_image = ""
-        self.username = "firstname lastname"
+        self.username = "FIRST_NAME LAST_NAME"
         self.script = f"Greetings!\n\tI hope the start of the semester has been treating you well. My name is {self.username} and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
         self.default_script = f"Greetings!\n\tI hope the start of the semester has been treating you well. My name is {self.username} and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
         
@@ -104,8 +104,7 @@ class ACMEmailGenerator:
     def on_script_button_click(self):
         try:
             print(self.filename)
-            name = InputPopup(self.root, "", "Enter First and Last Name to be put into default Script")
-            self.update_default_script(name.value)
+            
             read_data(self.filename,self.script)
             
             messagebox.showinfo("Success", f"Scripts created successfully.")
@@ -117,15 +116,19 @@ class ACMEmailGenerator:
     """
     def edit_script_button_click(self):
         try:
+            #name = InputPopup(self.root, "", "Enter First and Last Name to be put into default Script")
+            #self.name = name.value
+
+
             # Create a new top-level window for editing
             self.script_window = tk.Toplevel(self.root)
             self.script_window.title("Edit Script")
             self.script_window.geometry("800x600")
-            
+                
             # Create frame to hold text widget and buttons
             editor_frame = tk.Frame(self.script_window)
             editor_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-            
+                
             # Create scrollable text box
             self.script_editor = scrolledtext.ScrolledText(
                 editor_frame,
@@ -136,15 +139,15 @@ class ACMEmailGenerator:
                 pady=10
             )
             self.script_editor.pack(fill=tk.BOTH, expand=True)
-            
+                
             # Load existing script content if available
             if hasattr(self, 'script'):
                 self.script_editor.insert(tk.END, self.script)
-            
+                
             # Add control buttons
             button_frame = tk.Frame(editor_frame)
             button_frame.pack(fill=tk.X, pady=5)
-            
+                
             tk.Button(
                 button_frame, 
                 text="Save",
@@ -152,7 +155,7 @@ class ACMEmailGenerator:
                 bg="#4CAF50",
                 fg="white"
             ).pack(side=tk.LEFT, padx=5)
-            
+                
             tk.Button(
                 button_frame,
                 text="Clear",
