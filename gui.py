@@ -14,8 +14,9 @@ class ACMEmailGenerator:
         self.root.title("ACM Email Generator")
         self.image_url ="ACM.png"
         self.tk_image = ""
-        self.script = "Greetings!\n\tI hope the start of the semester has been treating you well. My name is Zander Brysch and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
-        self.default_script = "Greetings!\n\tI hope the start of the semester has been treating you well. My name is Zander Brysch and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
+        self.username = "firstname lastname"
+        self.script = f"Greetings!\n\tI hope the start of the semester has been treating you well. My name is {self.username} and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
+        self.default_script = f"Greetings!\n\tI hope the start of the semester has been treating you well. My name is {self.username} and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
         
         
         self.setup_ui()
@@ -103,8 +104,9 @@ class ACMEmailGenerator:
     def on_script_button_click(self):
         try:
             print(self.filename)
-            popup = InputPopup(self.root, "", "Enter First and Last Name to be put into default Script")
-            read_data(self.filename,popup.value,self.script)
+            name = InputPopup(self.root, "", "Enter First and Last Name to be put into default Script")
+            self.update_default_script(name.value)
+            read_data(self.filename,self.script)
             
             messagebox.showinfo("Success", f"Scripts created successfully.")
         except Exception as e:
@@ -195,6 +197,13 @@ class ACMEmailGenerator:
     
     def run(self):
         self.root.mainloop()
+
+
+    def update_default_script(self,username):
+        self.username = username
+        self.script = f"Greetings!\n\tI hope the start of the semester has been treating you well. My name is {self.username} and I am the membership officer of the Association of Computer Machinery or ACM. If you haven't heard of ACM before we are a computer science organization that strives to help fellow students learn more about coding and programming through community, workshops, hackathons, and other events. As ACM's Open House approaches, we wanted to see if we could send a representative of ACM to very briefly present what ACM is about and our upcoming events for the semester. If your interested please let us know, and confirm if we have all the correct classes below."
+
+        
     
     """
     an inputPopup object that can be used to create multiple inputPopups if necessary

@@ -57,7 +57,7 @@ Read reads each row of the csv and creates a corresponding Professor Object and 
 """
     
 
-def read_data(filename,username,script):
+def read_data(filename,script):
     
     
     with open(filename,'r') as infile:
@@ -109,7 +109,7 @@ def read_data(filename,username,script):
 
         
         for professor in manager.professors:
-            generate_script(professor,username,script)
+            generate_script(professor,script)
 
    
      
