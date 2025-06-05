@@ -3,7 +3,7 @@
 ## Description 📓 
 A program designed for recieiving, cleaning, and transforming school schedule data into sendable email formats with teacher filenames and their classes at the bottom.
 
-![Image of Program](https://imgur.com/a/rUjUz6G)
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/rUjUz6G"  ><a href="//imgur.com/a/rUjUz6G">ACM_Email_Generator</a></blockquote>
 
 ## How to use🛠️
 - When you are sent the CSV data sheet it should include many columns including the important ones below...
