@@ -3,8 +3,7 @@
 ## Description 📓 
 A program designed for recieiving, cleaning, and transforming school schedule data into sendable email formats with teacher filenames and their classes at the bottom.
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/rUjUz6G"  ><a href="//imgur.com/a/rUjUz6G">ACM_Email_Generator</a></blockquote>
-
+![Image of the program](images/ACM.png)
 ## How to use🛠️
 - When you are sent the CSV data sheet it should include many columns including the important ones below...
 
@@ -14,7 +13,7 @@ Instructor | Title | Times | Meeting Days | Course| Campus
 
 - Edit the dataset in any spreadsheet editor to remove any unwanted text above the header and below the final line of the dataset
  
-![Video of Previous Steps](https://imgur.com/a/qx201YA)
+![Video of Previous Steps](images/editing_dataset))
 
 - Make sure to do this as the program will not run correctly and crash otherwise
 
