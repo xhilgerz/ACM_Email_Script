@@ -20,6 +20,10 @@ class ACMEmailGenerator:
         
         self.setup_ui()
         
+    """
+    Sets up the starting window UI for user interaction
+    """
+    
     def setup_ui(self):
         # resizing the image
         image = Image.open(self.image_url)
@@ -64,6 +68,9 @@ class ACMEmailGenerator:
         self.status_label = tk.Label(self.root, text="No file selected")
         self.status_label.pack(pady=10)
     
+    """
+    Opens the file directory for the user to find the desired csv file
+    """
     def open_file(self):
         file_path = filedialog.askopenfilename(
             title="Select a File",
@@ -74,6 +81,9 @@ class ACMEmailGenerator:
             self.clean_button.config(state=tk.NORMAL)
             self.script_button.config(state=tk.NORMAL)
     
+    """
+    When the button is clicked the chosen csv file is cleaned removing any unnecessary data from the csv 
+    """
     def on_clean_button_click(self):
         try:
             filename = clean_data(self.filename)
@@ -85,6 +95,10 @@ class ACMEmailGenerator:
             messagebox.showinfo("Success", f"Copy created successfully: {end_name}")
         except Exception as e:
             messagebox.showerror("Error", str(e))
+
+    """
+    The cleaned csv ideally is parsed and .txt files are produced in a teacher-files folder
+    """
     
     def on_script_button_click(self):
         try:
@@ -96,6 +110,9 @@ class ACMEmailGenerator:
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
+    """
+    Allows the user to edit the script that is utilized for the script function
+    """
     def edit_script_button_click(self):
         try:
             # Create a new top-level window for editing
@@ -155,7 +172,9 @@ class ACMEmailGenerator:
         except Exception as e:
             messagebox.showerror("Editor Error", f"Failed to open editor:\n{str(e)}")
     
-    
+    """
+    Saves the script to be used in the script function
+    """
     def save_script(self):
         """Saves the content of the script editor"""
         if hasattr(self, 'script_editor'):
@@ -165,50 +184,21 @@ class ACMEmailGenerator:
             messagebox.showwarning("No Editor", "No active editor window found")
             
     
-    
+    """
+    Restores the script to the original default script 
+    """
     def restore_default_script(self):
         self.script_editor.delete(1.0, tk.END)
         self.script_editor.insert(tk.END, self.default_script)
 
     
     
-    
-    def create_editable_textbox(parent):
-        """Creates an editable, scrollable text box"""
-        # Create a frame to hold text widget and scrollbars
-        frame = tk.Frame(parent)
-        frame.pack(fill=tk.BOTH, expand=True)
-        
-        # Vertical scrollbar
-        y_scroll = tk.Scrollbar(frame)
-        y_scroll.pack(side=tk.RIGHT, fill=tk.Y)
-        
-        # Horizontal scrollbar (optional)
-        x_scroll = tk.Scrollbar(frame, orient=tk.HORIZONTAL)
-        x_scroll.pack(side=tk.BOTTOM, fill=tk.X)
-        
-        # Create the editable text widget
-        text_box = tk.Text(
-            frame,
-            wrap=tk.WORD,  # Wrap at word boundaries
-            yscrollcommand=y_scroll.set,
-            xscrollcommand=x_scroll.set,
-            undo=True,      # Enable undo/redo functionality
-            maxundo=-1,     # Unlimited undo steps
-            font=('Arial', 12)  # Customizable font
-        )
-        text_box.pack(fill=tk.BOTH, expand=True)
-        
-        # Configure scrollbars
-        y_scroll.config(command=text_box.yview)
-        x_scroll.config(command=text_box.xview)
-        
-        return text_box
-    
     def run(self):
         self.root.mainloop()
     
-    
+    """
+    an inputPopup object that can be used to create multiple inputPopups if necessary
+    """
 class InputPopup:
     def __init__(self, parent, title, prompt):
         self.popup = tk.Toplevel(parent)

@@ -1,4 +1,4 @@
-import csv
+
 import os
 """
 Writes each professor and their corresponding class into .txt file which is then stored in a folder. The name of each file is last_first_middle
