@@ -3,8 +3,10 @@ import gui
 
 
 def main():
-    app = gui.ACMEmailGenerator()
-    app.run()
+    
+    #flask_gui.run_desktop_app()
+    ACM = gui.ACMEmailGenerator()
+    ACM.run()
 
 
 main()
