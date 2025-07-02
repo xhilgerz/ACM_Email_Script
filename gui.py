@@ -3,6 +3,8 @@ from tkinter import filedialog, messagebox,scrolledtext
 from tkinter import Tk, Label
 from data import clean_data
 from data import read_data
+import sys
+import os
 
 from PIL import Image, ImageTk
 
@@ -27,7 +29,8 @@ class ACMEmailGenerator:
     
     def setup_ui(self):
         # resizing the image
-        image = Image.open(self.image_url)
+        img_path =  self.resource_path(self.image_url)
+        image = Image.open(img_path)
         new_width = 100
         new_height = 100
         image = image.resize((new_width, new_height), Image.LANCZOS)
@@ -68,7 +71,18 @@ class ACMEmailGenerator:
         # Status label
         self.status_label = tk.Label(self.root, text="No file selected")
         self.status_label.pack(pady=10)
+
+    """
+    Checks if it is being run as an executable or as a script and adapts accordingly so the program can still find the ACM Image
+    """
     
+    def resource_path(self,relative_path):
+
+        try:
+            base_path = sys._MEIPASS
+        except AttributeError:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
     """
     Opens the file directory for the user to find the desired csv file
     """
