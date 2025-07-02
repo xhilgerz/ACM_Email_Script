@@ -28,7 +28,7 @@ def clean_data(filename):
 
 
             try:
-                if row[8] != "TBA" and row[12] != "Staff":
+                if row[8] != "TBA" and row[12] != "Staff" and row[8] != "":
                     #print(row[5])
                     writer.writerow(row)
             except IndexError as e:
