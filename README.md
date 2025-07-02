@@ -19,7 +19,7 @@ Instructor | Title | Times | Meeting Days | Course| Campus
 
 - Use the **open folder** to find your edited csv
 
--  **"Clean"** the data which will remove any classes that are "To Be Arranged", or have not had their desired teachers chosen and labeled "Staff"
+-  **"Clean"** the data which will remove any classes that are "To Be Arranged", have not had their desired teachers chosen and labeled "Staff", or are asynchronous.
   
 - Prior to running the **generate scripts** button please make any edits to the script using the **edit script** 
   
