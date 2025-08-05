@@ -5,6 +5,7 @@ from data import clean_data
 from data import read_data
 import sys
 import os
+from heat_calendar import load_csv
 
 from PIL import Image, ImageTk
 
@@ -67,6 +68,13 @@ class ACMEmailGenerator:
         self.edit_script_button = tk.Button(self.root, text="Edit Script", 
                                      command=self.edit_script_button_click)
         self.edit_script_button.pack(pady=10)
+
+        self.create_calendar = tk.Button(self.root, text="Create Week Calendar", 
+                                    command=self.on_create_calendar_click,
+                                    state=tk.DISABLED)
+        self.create_calendar.pack(pady=10)
+        
+        self.clean_button.pack(pady=10)
         
         # Status label
         self.status_label = tk.Label(self.root, text="No file selected")
@@ -95,6 +103,7 @@ class ACMEmailGenerator:
             self.status_label.config(text=f"Selected: {file_path}")
             self.clean_button.config(state=tk.NORMAL)
             self.script_button.config(state=tk.NORMAL)
+            self.create_calendar.config(state=tk.NORMAL)
     
     """
     When the button is clicked the chosen csv file is cleaned removing any unnecessary data from the csv 
@@ -201,7 +210,18 @@ class ACMEmailGenerator:
             messagebox.showinfo("Saved", "Script content saved successfully!")
         else:
             messagebox.showwarning("No Editor", "No active editor window found")
+
+
+    def on_create_calendar_click(self):
+        try:
+            print(self.filename)
             
+            #function to create a calendar
+            load_csv(self.filename)
+            
+            messagebox.showinfo("Success", f"Week Schedule created successfully.")
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
     
     """
     Restores the script to the original default script 
