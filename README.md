@@ -67,12 +67,12 @@ While the columns shouldn't be in this order, make sure they are present
 
 ### Step 3: Generate Outputs
 
-## Option A: Email Scripts ✉️
+#### Option A: Email Scripts ✉️
 - (Optional) Click Edit Script to customize the email template.
 - Click Generate Scripts → Write Teacher Script.
 - A teacher-files folder will appear, containing individual .txt files per instructor.
 
-## Option B: Weekly Heatmap 🔥
+#### Option B: Weekly Heatmap 🔥
 - Click Create Week Calendar.
 - A heatmap.png file showing busy/quiet times (example below).
 ![heatmap](images/heatmap_example.png)
