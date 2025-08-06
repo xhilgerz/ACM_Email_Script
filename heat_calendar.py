@@ -15,7 +15,7 @@ def load_csv(filename):
 # --- Step 1: Parse Time Slots and Days ---
 def parse_time_and_days(row):
     time_str = row["Times"]
-    days_str = row["Meeting Days"]
+    days_str = row["Meeting Days"].strip().upper()
     
     # Split start/end times (e.g., "9:00-9:50am" → ["9:00", "9:50am"])
     start_time, end_time = time_str.split("-")
@@ -47,13 +47,13 @@ def parse_time_and_days(row):
     days = []
     i = 0
     while i < len(days_str):
-        if days_str[i:i+2] == "Th":
+        if days_str[i:i+2] == "TH":
             days.append(day_map["Th"])
             i += 2
         else:
             days.append(day_map[days_str[i]])
             i += 1
-    
+    print(f"Parsing days_str: {days_str} -> days: {days}")
     return time_slots, days
 
 # --- Step 2: Aggregate Class Counts ---
@@ -74,11 +74,14 @@ def create_dataframe(df):
                 if time_slot in heatmap_data.index and day in heatmap_data.columns:
                     heatmap_data.loc[time_slot, day] += 1
 
+    print(heatmap_data.columns)
+    print(heatmap_data.head())
+    print(heatmap_data["Saturday"].sum())  # Should be > 0 if there are Saturday classes
     # --- Step 3: Plot Heatmap ---
     plt.figure(figsize=(14, 10))
     sns.heatmap(
         heatmap_data,
-        cmap="Blues",  # Change to your preferred color map
+        cmap="blues",  # Change to your preferred color map
         annot=False,     # Show counts
         fmt="d",        # Integer format
         linewidths=0,
@@ -104,5 +107,5 @@ def create_dataframe(df):
     
     plt.tight_layout()
 
-    #plt.savefig("heatmap.png")
+    plt.savefig("heatmap.png")
     plt.show()
