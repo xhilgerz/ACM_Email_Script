@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext, ttk
-from Backend.data import create_sign_up,create_email_scripts
-from Backend.data import read_data
+from Backend.data import ACM_Data
 
 import sys
 import os
@@ -12,6 +11,7 @@ from PIL import Image, ImageTk
 class ACMEmailGenerator:
     def __init__(self):
         self.filename = ""
+        self.data = ACM_Data()
         self.root = tk.Tk()
         self.root.geometry("400x300")
         self.root.title("ACM Email Generator")
@@ -122,8 +122,8 @@ class ACMEmailGenerator:
     def on_clean_button_click(self):
 
         try:
-            create_sign_up(self.filename)
-        
+            self.data.create_sign_up(self.filename)
+
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
@@ -147,9 +147,7 @@ class ACMEmailGenerator:
         try:
             print(self.filename)
             
-            #read_data(self.filename,self.script)
-
-            create_email_scripts(self.filename,self.script)
+            self.data.create_email_scripts(self.filename,self.script)
             
             messagebox.showinfo("Success", f"Scripts created successfully.")
         except Exception as e:

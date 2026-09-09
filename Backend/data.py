@@ -66,6 +66,8 @@ class ACM_Data(Data,metaclass=Singleton):
 
     def clean_df(self,df):
         #Removes Classes that have a time that is TBA
+        df.columns = df.columns.str.lower().str.replace(" ","_")
+
         df = df.copy()
         df = df[df["times"] != "TBA"]
 
@@ -81,8 +83,10 @@ class ACM_Data(Data,metaclass=Singleton):
 
 
         #Any classes that are a syncrhnous
-        #df = df[(df["meeting_type"] != "Online only, no set time")]
-        #df = df[df["times"] != ""]
+        df = df[(df["meeting_type"] != "Online only, no set time")]
+        df = df[df["times"] != ""]
+
+        #df = df[df["course"].astype(int) < 2000]
 
         #Any classes that are a syncrhnous
         
@@ -145,70 +149,64 @@ class ACM_Data(Data,metaclass=Singleton):
             ACM_Script.generate_script(professor,script)
 
 
+    SIGN_UP_COLUMNS_TO_ADD = [
+        "confirmed",
+        "status",
+        "presenter",
+        "presentation_date",
+        "flyer",
+    ]
+    SIGN_UP_COLUMNS_TO_DROP = [
+        "status",
+        "section",
+        "crn",
+        "cred",
+        "date",
+        "weeks",
+        "seats",
+        "enrolled",
+        "available",
+        "wait_list",
+        "final_exam",
+        "fees",
+        "notes",
+    ]
+
+    def create_sign_up_df(self,df) -> pd.DataFrame:
+        """Pure transform: raw course rows -> the sign-up roster, no file I/O."""
+        df = self.normalize_df_headers(df)
+        df = self.clean_df(df)
+        df = self.add_columns(df,self.SIGN_UP_COLUMNS_TO_ADD)
+        df = self.drop_columns(df,self.SIGN_UP_COLUMNS_TO_DROP)
+        return df
+
     def create_sign_up(self,filename):
         df = self.csv_to_df(filename)
+        df = self.create_sign_up_df(df)
 
-        
-        
-        
-        df = self.normalize_df_headers(df)
-        print("RAW COLUMNS:", df.columns.tolist())
-
-        df = self.clean_df(df)
-
-        columns_to_add = [
-            "confirmed",
-            "status",
-            "presenter",
-            "presentation_date",
-            "flyer",
-        ]
-        columns_to_drop = ["status",
-                    "section",
-                    "crn",
-                    "cred",
-                    "date",
-                    "weeks",
-                    "seats",
-                    "enrolled",
-                    "available",
-                    "wait_list",
-                    "final_exam",
-                    "fees",
-                    "notes"]
-        
-        print("NORMALIZED COLUMNS:", df.columns.tolist())
-        df = self.add_columns(df,columns_to_add)
-        df = self.drop_columns(df,columns_to_drop)
-
-        #async_fill(df);
         output_name = filename + "_output.csv"
         self.df_to_csv(df,output_name)
+        return output_name
 
+    def create_email_scripts_df(self,df):
+        """Pure transform: roster rows -> a Manager of professors/courses, ready for write_scripts."""
+        df = self.normalize_df_headers(df)
+        df = self.clean_df(df)
+        notion_import = "presenter" in df.columns and "presentation_date" in df.columns
+        return self.df_to_teacher_manager(df,notion_import=notion_import)
 
-        
     def create_email_scripts(self,filename,script):
         df = self.csv_to_df(filename)
-        df = self.normalize_df_headers(df)
-        manager = self.df_to_teacher_manager(df,notion_import = True)
+        manager = self.create_email_scripts_df(df)
         self.write_scripts(manager,script)
 
+    def create_heatmap_df(self,df):
+        from Backend.heat_calendar import build_heatmap_dataframe
 
-        
-    def create_heatmap(self,filename):
-        
-        df = self.csv_to_df(filename)
         df = self.normalize_df_headers(df)
-        return self.create_df_heatmap(df)
+        df = self.clean_df(df)
+        return build_heatmap_dataframe(df)
 
-        
-
-    def create_df_heatmap(self,df):
-        time_range = [f"{h:02d}:{m:02d}" for h in range(24) for m in range(0, 60, 5)]
-        days_ordered = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-        heatmap_data = df.DataFrame(0, index=time_range, columns=days_ordered)
-        return heatmap_data
-        
-
-        
-    
+    def create_heatmap(self,filename):
+        df = self.csv_to_df(filename)
+        return self.create_heatmap_df(df)

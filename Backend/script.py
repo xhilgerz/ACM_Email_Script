@@ -69,12 +69,8 @@ class ACM_Script(Class_Script, metaclass=Singleton):
     def get_last_name(self):
         return self.last_name
     
-    def generate_script(professor,script):
-
-        output_folder = "teacher_files"
-
-        os.makedirs(output_folder, exist_ok=True)
-
+    @staticmethod
+    def safe_professor_filename(professor) -> str:
         raw_name = professor.name
         if raw_name is None:
             safe_name = "unknown_professor"
@@ -83,33 +79,41 @@ class ACM_Script(Class_Script, metaclass=Singleton):
         else:
             safe_name = str(raw_name).strip() or "unknown_professor"
 
-        name_arr = safe_name.replace('.','').replace(' ','_').replace(',','')
-        filename = name_arr +".txt"
-        
+        name_arr = safe_name.replace('.', '').replace(' ', '_').replace(',', '')
+        return name_arr + ".txt"
+
+    @staticmethod
+    def build_script_text(professor, script) -> str:
+        lines = [script + "\n\n"]
+        for course in professor.courses:
+            presenter_missing = pd.isna(course.presenter) or str(course.presenter).strip() == ""
+            date_missing = pd.isna(course.presentation_date) or str(course.presentation_date).strip() == ""
+            asynchronous = (pd.isna(course.date) or str(course.date).strip() == "") and \
+                           (pd.isna(course.time) or str(course.time).strip() == "")
+
+            info = f"CS {course.course_num} {course.name} {course.date} {course.time} {course.campus} presented by {course.presenter} on {course.presentation_date}\n"
+
+            if asynchronous:
+                info = f"Since {course.course_num} {course.name} is an asynchronous class we'd like for you to post the video in canvas.\n"
+            elif presenter_missing and date_missing:
+                info = f"While no representatives are signed up for {course.course_num} {course.name} {course.date} {course.time} {course.campus}. It would be a great help if you showed the video in class\n"
+
+            lines.append(info + "\n")
+
+        return "".join(lines)
+
+    def generate_script(professor,script):
+
+        output_folder = "teacher_files"
+
+        os.makedirs(output_folder, exist_ok=True)
+
+        filename = ACM_Script.safe_professor_filename(professor)
+        content = ACM_Script.build_script_text(professor, script)
+
         file_path = os.path.join(output_folder, filename)
-        with open(file_path,'w') as outfile:
-            outfile.write(ACM_Script.script+"\n"+"\n")
-            for course in professor.courses:
-                presenter_missing = pd.isna(course.presenter) or str(course.presenter).strip() == ""
-                date_missing = pd.isna(course.presentation_date) or str(course.presentation_date).strip() == ""
-                asynchronous = pd.isna(course.date) or str(course.date).strip() =="" and pd.isna(course.time) or str(course.time).strip() ==""
-
-                info = f"CS {course.course_num} {course.name} {course.date} {course.time} {course.campus} presented by {course.presenter} on {course.presentation_date}\n"
-
-                if asynchronous:
-                    info = f"Since {course.course_num} {course.name}is an asynchronous class we'd like for you to post the video in canvas.\n"
-                elif presenter_missing and date_missing:
-                    info = f"While no representatives are signed up for {course.course_num} {course.name} {course.date} {course.time} {course.campus}. It would be a great help if you showed the video in class\n"
-
-                
-
-
-                info = info + "\n"
-                outfile.write(info)
-
-
-
-    pass
+        with open(file_path, 'w') as outfile:
+            outfile.write(content)
 
 
 
